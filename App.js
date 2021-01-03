@@ -1,21 +1,48 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import "react-native-gesture-handler";
+import { StatusBar } from "expo-status-bar";
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
-export default function App() {
+import Indexscreen from "./src/screens/Indexscreen";
+import CreateBlog from "./src/screens/CreateBlog";
+import ShowBlog from "./src/screens/ShowBlog";
+
+import { Blogprovider } from "./src/context/Blogcontext";
+
+const Stack = createStackNavigator();
+
+function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={Indexscreen}
+          options={{ title: "Blogs" }}
+        />
+        <Stack.Screen
+          name="AddBlog"
+          component={CreateBlog}
+          options={{ title: "Create" }}
+        />
+        <Stack.Screen
+          name="Detail"
+          component={ShowBlog}
+          options={{ title: "detail" }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const styles = StyleSheet.create({});
+
+export default () => {
+  return (
+    <Blogprovider>
+      <App />
+    </Blogprovider>
+  );
+};
