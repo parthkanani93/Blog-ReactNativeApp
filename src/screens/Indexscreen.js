@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -10,7 +10,7 @@ import {
 import Blogcontext from "../context/Blogcontext";
 
 const Indexscreen = ({ navigation }) => {
-  const { data } = useContext(Blogcontext);
+  const { data, deleteblog } = useContext(Blogcontext);
 
   return (
     <View>
@@ -30,15 +30,21 @@ const Indexscreen = ({ navigation }) => {
                 }}
               >
                 <Text style={styles.text}>{item.title}</Text>
-                <Text style={styles.text}>{item.id}</Text>
               </TouchableOpacity>
-              <Button title="Edit" color="green" />
+              <Button
+                title="Edit"
+                color="green"
+                onPress={() => {
+                  navigation.navigate("Edit", {
+                    id: item.id,
+                  });
+                }}
+              />
               <Button
                 title="Delete"
                 color="red"
                 onPress={() => {
-                  data.splice(item.id, 1).concat(data.slice(-1));
-                  console.log("delete sucessful");
+                  deleteblog({ item });
                 }}
               />
             </View>

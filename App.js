@@ -8,6 +8,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Indexscreen from "./src/screens/Indexscreen";
 import CreateBlog from "./src/screens/CreateBlog";
 import ShowBlog from "./src/screens/ShowBlog";
+import EditBlog from "./src/screens/EditBlog";
 
 import { Blogprovider } from "./src/context/Blogcontext";
 
@@ -31,6 +32,11 @@ function App() {
           name="Detail"
           component={ShowBlog}
           options={{ title: "detail" }}
+        />
+        <Stack.Screen
+          name="Edit"
+          component={EditBlog}
+          options={{ title: "edit blog" }}
         />
       </Stack.Navigator>
     </NavigationContainer>
