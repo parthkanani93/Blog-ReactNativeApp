@@ -1,11 +1,23 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useReducer } from "react";
 import { View, TextInput, Text, Button, StyleSheet } from "react-native";
 import Blogcontext from "../context/Blogcontext";
 
 const EditBlog = ({ route, navigation }) => {
   const { editblog } = useContext(Blogcontext);
-  const [newtitle, setnewtitle] = useState("");
-  const [newDesc, setnewDesc] = useState("");
+
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case "title":
+        return { ...state, newtitle: action.payload };
+      case "desc":
+        return { ...state, newdesc: action.payload };
+      default:
+        return state;
+    }
+  };
+
+  const [state, dispatch] = useReducer(reducer, { newtitle: "", newdesc: "" });
+
   const { id } = route.params;
   return (
     <View style={styles.maincontainer}>
@@ -14,8 +26,8 @@ const EditBlog = ({ route, navigation }) => {
         <TextInput
           style={styles.inputstyle}
           placeholder="Enter New Title"
-          onChangeText={(text) => setnewtitle(text)}
-          value={newtitle}
+          onChangeText={(text) => dispatch({ type: "title", payload: text })}
+          value={state.newtitle}
         />
       </View>
       <View style={styles.innercontainer}>
@@ -23,13 +35,15 @@ const EditBlog = ({ route, navigation }) => {
         <TextInput
           style={styles.inputstyle}
           placeholder="Enter New Description"
-          onChangeText={(text) => setnewDesc(text)}
-          value={newDesc}
+          onChangeText={(text) => dispatch({ type: "desc", payload: text })}
+          value={state.newdesc}
         />
       </View>
       <Button
         title="Confirm Edit"
         onPress={() => {
+          var newtitle = state.newtitle;
+          var newDesc = state.newdesc;
           editblog({ newtitle, newDesc, id });
           navigation.navigate("Home");
         }}

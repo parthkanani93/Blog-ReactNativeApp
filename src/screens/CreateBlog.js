@@ -1,11 +1,20 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext, useReducer } from "react";
 import { StyleSheet, View, TextInput, Button, Text } from "react-native";
-import { add } from "react-native-reanimated";
 import Blogcontext from "../context/Blogcontext";
 
 const CreateBlog = ({ navigation }) => {
-  const [title, settitle] = useState("");
-  const [desc, setdesc] = useState("");
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case "title":
+        return { ...state, title: action.payload };
+      case "desc":
+        return { ...state, desc: action.payload };
+      default:
+        return state;
+    }
+  };
+
+  const [state, dispatch] = useReducer(reducer, { title: "", desc: "" });
 
   const { addblog } = useContext(Blogcontext);
   return (
@@ -15,8 +24,8 @@ const CreateBlog = ({ navigation }) => {
         <TextInput
           style={styles.inputstyle}
           placeholder="Enter Title"
-          onChangeText={(text) => settitle(text)}
-          value={title}
+          onChangeText={(text) => dispatch({ type: "title", payload: text })}
+          value={state.title}
         />
       </View>
       <View style={styles.innercontainer}>
@@ -24,14 +33,16 @@ const CreateBlog = ({ navigation }) => {
         <TextInput
           style={styles.inputstyle}
           placeholder="Enter Description"
-          onChangeText={(text) => setdesc(text)}
-          value={desc}
+          onChangeText={(text) => dispatch({ type: "desc", payload: text })}
+          value={state.desc}
         />
       </View>
       <Button
         title="Create"
         onPress={() => {
-          addblog({ title, desc });
+          var newtitle = state.title;
+          var newdesc = state.desc;
+          addblog({ newtitle, newdesc });
           navigation.navigate("Home");
         }}
       />
